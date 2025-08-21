@@ -46,7 +46,6 @@ export default function SessionPage() {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
   }
 
-  // simple bubble styles (no Tailwind required)
   const bubbleUser: React.CSSProperties = {
     marginLeft: 'auto',
     maxWidth: '85%',
@@ -72,9 +71,7 @@ export default function SessionPage() {
       <Header />
       <IntroBar />
 
-      {/* Chat-first homepage */}
       <main style={{ minHeight: '100vh', background: '#0b0b0b', color: '#f0f0f0' }}>
-        {/* Center column */}
         <div
           style={{
             maxWidth: 960,
@@ -85,31 +82,29 @@ export default function SessionPage() {
             minHeight: 'calc(100vh - 140px)',
           }}
         >
-          {/* Title/meta */}
-          <header style={{ paddingTop: 16, paddingBottom: 12 }}>
+          <header style={{ paddingTop: 16, paddingBottom: 6 }}>
             <h1 style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.25, margin: 0 }}>Max • chat</h1>
-            <p style={{ margin: '6px 0 0 0', color: '#c9c9c9', fontSize: 14 }}>
-              Familiar chat surface. Different behavior.
-            </p>
-            <div style={{ marginTop: 6, color: '#8a8a8a', fontSize: 12 }}>
+            <div style={{ marginTop: 4, color: '#a8a8a8', fontSize: 12 }}>
               v2.4.3 • mirror | Anti-KISS | No Offers | Deliberate
             </div>
           </header>
 
-          {/* Messages pane */}
+          {/* Chat pane */}
           <div
             ref={scrollRef}
             style={{
               flex: 1,
               border: '1px solid #2a2a2a',
               borderRadius: 12,
-              background: 'rgba(20,20,20,0.85)',
+              background: 'rgba(22,22,22,0.95)',
               overflowY: 'auto',
-              padding: 8,
+              padding: 12,
+              boxShadow: '0 4px 20px rgba(0,0,0,0.25) inset',
+              minHeight: 520,
             }}
           >
             {msgs.length === 0 && (
-              <div style={{ color: '#c9c9c9', padding: 8 }}>
+              <div style={{ color: '#c9c9c9', padding: 4 }}>
                 Hi, my name is Max. And yes, I know this page looks A LOT LIKE another AI that you probably work with.
                 Ask me a question and I think you&apos;ll see how I&apos;m a bit different :)
               </div>
@@ -138,32 +133,43 @@ export default function SessionPage() {
             )}
           </div>
 
-          {/* Composer pinned to bottom */}
+          {/* Composer container (looks like ChatGPT) */}
           <div style={{ position: 'sticky', bottom: 0, background: '#0b0b0b', paddingTop: 12, paddingBottom: 20 }}>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                background: '#121212',
+                border: '1px solid #2a2a2a',
+                borderRadius: 12,
+                padding: 6,
+              }}
+            >
               <textarea
                 aria-label="Your message"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={onKeyDown}
-                placeholder="Type a message — Press Enter to send, Shift+Enter for newline"
+                placeholder="Message Max — Enter to send, Shift+Enter for newline"
                 rows={2}
                 maxLength={1500}
                 style={{
                   flex: 1,
-                  borderRadius: 10,
-                  background: '#121212',
-                  border: '1px solid #2a2a2a',
-                  padding: '10px 12px',
+                  borderRadius: 8,
+                  background: 'transparent',
+                  border: 'none',
+                  padding: '8px 10px',
                   color: '#f0f0f0',
                   outline: 'none',
+                  resize: 'none',
                 }}
               />
               <button
                 onClick={send}
                 disabled={loading}
                 style={{
-                  padding: '10px 16px',
+                  padding: '10px 14px',
                   height: 40,
                   borderRadius: 10,
                   background: '#fff',
