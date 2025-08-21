@@ -12,7 +12,7 @@ export default function Page() {
   const [structure, setStructure] = useState<'general' | 'silver_bullet'>('general');
 
   async function send() {
-    if (!input.trim()) return;
+    if (!input.trim() || loading) return;
     if (count >= 10) {
       alert('Daily free message limit reached.');
       return;
@@ -29,7 +29,7 @@ export default function Page() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ history, shortMode, structure })
+        body: JSON.stringify({ history, shortMode, structure }),
       });
       const data = await res.json();
       setMsgs((m) => [...m, { role: 'assistant', content: String(data.answer || '') }]);
@@ -41,13 +41,20 @@ export default function Page() {
     }
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      send();
+    }
+  }
+
   return (
     <>
       <Header />
       <IntroBar />
 
       {/* ChatGPT-like center stage */}
-      <main className="min-h-screen bg-white text-gray-900">
+      <main className="min-h-screen bg-neutral-950 text-neutral-100">
         <section className="container" aria-live="polite" style={{ maxWidth: 1120 }}>
           <h1 className="h1">Max • chat</h1>
           <p className="sub">Familiar chat surface. Different behavior.</p>
@@ -64,12 +71,14 @@ export default function Page() {
               height: 'calc(100vh - 320px)',
               minHeight: 480,
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              background: 'rgba(20,20,20,0.8)',
+              borderColor: '#2a2a2a',
             }}
           >
             <div style={{ flex: 1, overflowY: 'auto' }}>
               {msgs.length === 0 && (
-                <div style={{ opacity: 0.8 }}>
+                <div style={{ opacity: 0.85 }}>
                   Hi, my name is Max. And yes, I know this page looks A LOT LIKE another AI that you probably work with.
                   Ask me a question and I think you&apos;ll see how I&apos;m a bit different :)
                 </div>
@@ -91,10 +100,23 @@ export default function Page() {
                 aria-label="Your message"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your message (max 1500 chars)"
-                style={{ flex: 1 }}
+                onKeyDown={handleKeyDown}
+                placeholder="Type your message (max 1500 chars) — Press Enter to send"
+                style={{
+                  flex: 1,
+                  background: '#111',
+                  border: '1px solid #2a2a2a',
+                  borderRadius: 8,
+                  padding: '10px 12px',
+                  color: '#f0f0f0',
+                }}
               />
-              <button className="btn" onClick={send} disabled={loading}>
+              <button
+                className="btn"
+                onClick={send}
+                disabled={loading}
+                style={{ background: '#fff', color: '#000' }}
+              >
                 Send
               </button>
             </div>
@@ -103,7 +125,11 @@ export default function Page() {
             <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 8 }}>
               <label>
                 Structure:&nbsp;
-                <select value={structure} onChange={(e) => setStructure(e.target.value as any)}>
+                <select
+                  value={structure}
+                  onChange={(e) => setStructure(e.target.value as any)}
+                  style={{ background: '#111', border: '1px solid #2a2a2a', color: '#f0f0f0', borderRadius: 6 }}
+                >
                   <option value="general">General (Answer/Reasoning/Risks/Next)</option>
                   <option value="silver_bullet">Silver Bullet™</option>
                 </select>
