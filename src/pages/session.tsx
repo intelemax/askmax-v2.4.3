@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import IntroBar from '@/components/IntroBar';
 import React, { useState } from 'react';
 
 export default function SessionPage() {
@@ -43,7 +44,9 @@ export default function SessionPage() {
   return (
     <>
       <Header />
-      <section className="container" aria-live="polite">
+      <IntroBar />
+
+      <section className="container" aria-live="polite" style={{ maxWidth: 1120 }}>
         <h1 className="h1">Session</h1>
         <p className="sub">Deliberate mode. We don&apos;t store your chat content.</p>
 
@@ -51,56 +54,70 @@ export default function SessionPage() {
           v2.4.3 | Anti-KISS | No Offers | Deliberate
         </div>
 
-        <div className="card" style={{ minHeight: 240, padding: 16 }}>
-          {msgs.length === 0 && (
-            <div style={{ opacity: 0.8 }}>
-              Ask me something hard. I&apos;ll answer with structure and context.
-            </div>
-          )}
+        {/* Larger dialogue box */}
+        <div
+          className="card"
+          style={{
+            padding: 16,
+            height: 'calc(100vh - 320px)',
+            minHeight: 420,
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          <div style={{ flex: 1, overflowY: 'auto' }}>
+            {msgs.length === 0 && (
+              <div style={{ opacity: 0.8 }}>
+                Hi, my name is Max. And yes, I know this page looks A LOT LIKE another AI that you probably work with.
+                Ask me a question and I think you&apos;ll see how I&apos;m a bit different :)
+              </div>
+            )}
 
-          {msgs.map((m, i) => (
-            <div key={i} style={{ marginBottom: 12 }}>
-              <div style={{ fontWeight: 600 }}>{m.role === 'user' ? 'You' : 'Max'}</div>
-              <div>{m.content}</div>
-            </div>
-          ))}
+            {msgs.map((m, i) => (
+              <div key={i} style={{ marginBottom: 12 }}>
+                <div style={{ fontWeight: 600 }}>{m.role === 'user' ? 'You' : 'Max'}</div>
+                <div>{m.content}</div>
+              </div>
+            ))}
 
-          {loading && <div>(thinking...)</div>}
-        </div>
+            {loading && <div>(thinking...)</div>}
+          </div>
 
-        <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-          <input
-            aria-label="Your message"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message (max 1500 chars)"
-          />
-          <button className="btn" onClick={send} disabled={loading}>
-            Send
-          </button>
-        </div>
-
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 8 }}>
-          <label>
-            Structure:&nbsp;
-            <select value={structure} onChange={(e) => setStructure(e.target.value as any)}>
-              <option value="general">General (Answer/Reasoning/Risks/Next)</option>
-              <option value="silver_bullet">Silver Bullet™</option>
-            </select>
-          </label>
-
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
             <input
-              type="checkbox"
-              checked={shortMode}
-              onChange={(e) => setShortMode(e.target.checked)}
+              aria-label="Your message"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type your message (max 1500 chars)"
+              style={{ flex: 1 }}
             />
-            Short mode (concise answers)
-          </label>
-        </div>
+            <button className="btn" onClick={send} disabled={loading}>
+              Send
+            </button>
+          </div>
 
-        <div className="badge" style={{ marginTop: 8 }}>
-          Messages today: {count} / 10
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 8 }}>
+            <label>
+              Structure:&nbsp;
+              <select value={structure} onChange={(e) => setStructure(e.target.value as any)}>
+                <option value="general">General (Answer/Reasoning/Risks/Next)</option>
+                <option value="silver_bullet">Silver Bullet™</option>
+              </select>
+            </label>
+
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input
+                type="checkbox"
+                checked={shortMode}
+                onChange={(e) => setShortMode(e.target.checked)}
+              />
+              Short mode (concise answers)
+            </label>
+          </div>
+
+          <div className="badge" style={{ marginTop: 8 }}>
+            Messages today: {count} / 10
+          </div>
         </div>
 
         <noscript>This page requires JavaScript.</noscript>
