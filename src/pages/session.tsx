@@ -29,7 +29,7 @@ export default function SessionPage() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ history, shortMode, structure })
+        body: JSON.stringify({ history, shortMode, structure }),
       });
       const data = await res.json();
       setMsgs((m) => [...m, { role: 'assistant', content: String(data.answer || '') }]);
@@ -47,7 +47,7 @@ export default function SessionPage() {
       <IntroBar />
 
       <section className="container" aria-live="polite" style={{ maxWidth: 1120 }}>
-        <h1 className="h1">Session</h1>
+        <h1 className="h1">Session • mirror</h1>
         <p className="sub">Deliberate mode. We don&apos;t store your chat content.</p>
 
         <div className="badge" style={{ marginBottom: 12 }}>
@@ -59,10 +59,10 @@ export default function SessionPage() {
           className="card"
           style={{
             padding: 16,
-            height: 'calc(100vh - 320px)',
+            height: 'calc(100vh - 320px)', // tall viewport chat
             minHeight: 420,
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
           }}
         >
           <div style={{ flex: 1, overflowY: 'auto' }}>
@@ -83,6 +83,7 @@ export default function SessionPage() {
             {loading && <div>(thinking...)</div>}
           </div>
 
+          {/* Input row */}
           <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
             <input
               aria-label="Your message"
@@ -96,6 +97,7 @@ export default function SessionPage() {
             </button>
           </div>
 
+          {/* Controls */}
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 8 }}>
             <label>
               Structure:&nbsp;
