@@ -2,12 +2,19 @@ import React, { useState } from "react";
 
 export default function Home() {
   const [input, setInput] = useState("");
+  const [lastSent, setLastSent] = useState<string | null>(null);
+
+  function actuallySend(text: string) {
+    console.log("SEND:", text); // placeholder; backend wiring next
+    setLastSent(text);
+    setTimeout(() => setLastSent(null), 3000); // fade after 3s
+  }
 
   function send() {
     const text = input.trim();
     if (!text) return;
-    console.log("SEND:", text); // placeholder; backend wiring next
     setInput("");
+    actuallySend(text);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -90,8 +97,15 @@ export default function Home() {
               Send
             </button>
           </div>
+
+          {/* tiny confirmation line (still part of the input area) */}
           <div style={{ marginTop: 8, fontSize: 12, opacity: 0.7 }}>
             Press <b>Enter</b> to send • <b>Shift+Enter</b> for a new line
+            {lastSent && (
+              <span style={{ marginLeft: 14, color: "#9ad" }}>
+                • Sent: <i>{lastSent}</i>
+              </span>
+            )}
           </div>
         </div>
       </main>
