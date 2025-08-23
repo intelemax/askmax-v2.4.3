@@ -2,12 +2,15 @@ import { useState } from "react";
 
 export default function Home() {
   const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<string[]>([]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();              // stop newline
-      console.log("SEND:", input.trim());
-      setInput("");                    // clear after “send”
+      e.preventDefault();              
+      if (input.trim() !== "") {
+        setMessages([...messages, input.trim()]); // show on screen
+        setInput("");                            
+      }
     }
   }
 
@@ -22,8 +25,8 @@ export default function Home() {
         Fire away!</p>
       </div>
 
-      {/* Input */}
-      <div style={{ flex:"1 0 auto", display:"flex", justifyContent:"center" }}>
+      {/* Input + Message display */}
+      <div style={{ flex:"1 0 auto", display:"flex", flexDirection:"column", alignItems:"center" }}>
         <textarea
           placeholder="Ask me anything…"
           value={input}
@@ -31,6 +34,15 @@ export default function Home() {
           onKeyDown={handleKeyDown}
           style={{ width:"80%", height:"150px", padding:"10px", fontSize:"16px" }}
         />
+        
+        {/* Display sent messages */}
+        <div style={{ width:"80%", marginTop:"20px", textAlign:"left" }}>
+          {messages.map((msg, i) => (
+            <p key={i} style={{ background:"#222", color:"#fff", padding:"10px", borderRadius:"6px", marginTop:"5px" }}>
+              {msg}
+            </p>
+          ))}
+        </div>
       </div>
 
       {/* Steve’s note */}
