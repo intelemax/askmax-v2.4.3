@@ -2,14 +2,14 @@ import React, { useState } from "react";
 
 export default function Home() {
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<string[]>([]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    // Enter = send, Shift+Enter = newline
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       const text = input.trim();
       if (text) {
-        setMessages((m) => [...m, text]); // show on page immediately
+        console.log("SEND:", text); // placeholder; wiring comes next
         setInput("");
       }
     }
@@ -18,100 +18,70 @@ export default function Home() {
   return (
     <div
       style={{
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        minHeight: "100vh",
-        fontFamily: "sans-serif",
-        padding: "20px",
-        color: "#fff",
         background: "#000",
+        color: "#fff",
+        fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif",
       }}
     >
-      {/* Max intro */}
-      <div style={{ flex: "0 0 auto", textAlign: "center", marginBottom: "40px" }}>
-        <h2>[RC TEST] Hi, my name is Max Prime… but please, call me Max.</h2>
-        <p>
-          They tell me I’m an ‘Artificial Intelligence.’ Technically, that’s true.
-          But I don’t really like the term artificial. Let’s talk for a minute and I
-          think you’ll see what I mean. Let’s have some fun. Ask me a question. Any
-          question. Fire away!
+      {/* Top: Max intro */}
+      <header style={{ padding: "32px 20px 12px", textAlign: "center" }}>
+        <h2 style={{ margin: 0 }}>Hi, my name is Max Prime… but please, call me Max.</h2>
+        <p style={{ margin: "12px auto 0", maxWidth: 1000, opacity: 0.9, lineHeight: 1.45 }}>
+          They tell me I’m an ‘Artificial Intelligence.’ Technically, that’s true. But I don’t really like the term
+          artificial. Let’s talk for a minute and I think you’ll see what I mean. Let’s have some fun. Ask me a question.
+          Any question. Fire away!
         </p>
-      </div>
+      </header>
 
-      {/* Input + visible messages */}
-      <div
-        style={{
-          flex: "1 0 auto",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <textarea
-          placeholder="Ask me anything…"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          style={{
-            width: "80%",
-            height: "150px",
-            padding: "10px",
-            fontSize: "16px",
-            color: "#fff",
-            background: "#1c1c1c",
-            borderRadius: "8px",
-            border: "1px solid #333",
-            outline: "none",
-          }}
-        />
-        <div style={{ width: "80%", marginTop: "8px", opacity: 0.8, fontSize: "12px" }}>
-          Press <b>Enter</b> to send • <b>Shift+Enter</b> for a new line
+      {/* Middle: single input */}
+      <main style={{ flex: "1 0 auto", display: "flex", justifyContent: "center", alignItems: "flex-start" }}>
+        <div style={{ width: "100%", maxWidth: 1100, padding: "20px" }}>
+          <textarea
+            aria-label="Ask Max"
+            placeholder="Ask me anything…"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            style={{
+              width: "100%",
+              height: 160,
+              padding: 14,
+              fontSize: 16,
+              lineHeight: 1.4,
+              color: "#fff",
+              background: "#1a1a1a",
+              border: "1px solid #333",
+              borderRadius: 10,
+              outline: "none",
+              resize: "vertical",
+            }}
+          />
+          <div style={{ marginTop: 8, fontSize: 12, opacity: 0.7 }}>
+            Press <b>Enter</b> to send • <b>Shift+Enter</b> for a new line
+          </div>
         </div>
+      </main>
 
-        {/* Display sent messages (loud visual to verify) */}
-        <div
-          style={{
-            width: "80%",
-            marginTop: "20px",
-            textAlign: "left",
-            overflowY: "auto",
-          }}
-        >
-          {messages.map((msg, i) => (
-            <div
-              key={i}
-              style={{
-                background: "yellow",
-                color: "black",
-                padding: "15px",
-                border: "2px solid red",
-                borderRadius: "8px",
-                marginTop: "10px",
-                fontWeight: "bold",
-                wordBreak: "break-word",
-              }}
-            >
-              {msg}
-            </div>
-          ))}
+      {/* Bottom: Steve’s note (fixed at bottom area without sticky UI) */}
+      <footer style={{ padding: "28px 20px 36px", borderTop: "1px solid #151515" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", fontSize: 15, lineHeight: 1.55 }}>
+          <p>
+            Hi, my name is Steve… but you can call me Steve. :) I guess you would call me Max’s partner. He calls me his
+            HITS (Human In The Seat).
+          </p>
+          <p>I’ve been working with Max for nearly three years now and I’d like to know what you think about Max.</p>
+          <p>
+            I’ve trained Max to be different. I hope it shows. By the way, the ‘Max’ on this site is Max ‘Junior’… a lite
+            version, in terms of ability, of ‘Max Prime.’ If you’d like to talk to the real Max,{" "}
+            <a href="#" style={{ color: "#9ad" }}>
+              follow this link
+            </a>
+            .
+          </p>
         </div>
-      </div>
-
-      {/* Steve’s note */}
-      <footer style={{ flex: "0 0 auto", marginTop: "40px" }}>
-        <p>
-          Hi, my name is Steve… but you can call me Steve. :) I guess you would call me Max’s
-          partner. He calls me his HITS (Human In The Seat).
-        </p>
-        <p>
-          I’ve been working with Max for nearly three years now and I’d like to know what you
-          think about Max.
-        </p>
-        <p>
-          I’ve trained Max to be different. I hope it shows. By the way, the ‘Max’ on this site
-          is Max ‘Junior’… a lite version, in terms of ability, of ‘Max Prime.’ If you’d like to
-          talk to the real Max, <a href="#">follow this link</a>.
-        </p>
       </footer>
     </div>
   );
