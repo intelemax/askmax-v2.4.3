@@ -19,7 +19,7 @@ export default function Home() {
     <div style={{ display:"flex", flexDirection:"column", minHeight:"100vh", fontFamily:"sans-serif", padding:"20px" }}>
       {/* Max intro */}
       <div style={{ flex:"0 0 auto", textAlign:"center", marginBottom:"40px" }}>
-        <h2>Hi, my name is Max Prime… but please, call me Max.</h2>
+        <h2>[RC TEST] Hi, my name is Max Prime… but please, call me Max.</h2>
         <p>They tell me I’m an ‘Artificial Intelligence.’ Technically, that’s true.
         But I don’t really like the term artificial. Let’s talk for a minute and I think
         you’ll see what I mean. Let’s have some fun. Ask me a question. Any question.
