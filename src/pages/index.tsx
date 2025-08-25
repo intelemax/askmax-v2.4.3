@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
 export default function Home() {
-  // ChatGPT-like palette + your logo accent
+  // ChatGPT-like tokens
   const COLORS = {
     bg: "#202123",
-    panel: "#343541",
-    text: "#ECECEC",
-    border: "#3f4147",
-    accent: "#10a37f", // ChatGPT green
+    panel: "#40414f",
+    text: "#ececf1",
+    border: "#565869",
+    accent: "#10a37f",
     accentBorder: "#0e8a6e",
   };
 
@@ -28,6 +28,8 @@ export default function Home() {
     }
   }
 
+  const disabled = input.trim().length === 0;
+
   return (
     <div
       style={{
@@ -41,30 +43,28 @@ export default function Home() {
       }}
     >
       {/* Top: Logo + Max intro */}
-      <header style={{ padding: "32px 20px 0", textAlign: "center" }}>
+      <header style={{ padding: "30px 20px 0", textAlign: "center" }}>
         <div
           style={{
-            display: "flex",
+            display: "inline-flex",
             alignItems: "center",
-            justifyContent: "center",
-            gap: 12,
+            gap: 10,
             marginBottom: 8,
           }}
         >
           {logoVisible && (
             <img
-              src="/max-logo.png"
+              src="/max-logo.png" // uses your PNG logo
               alt="Max logo"
               width={40}
               height={40}
-              style={{ display: "inline-block" }}
-              onError={() => setLogoVisible(false)} // hides if file not present
+              onError={() => setLogoVisible(false)}
+              style={{ borderRadius: 8 }}
             />
           )}
           <h2 style={{ margin: 0 }}>Hi, my name is Max Prime… but please, call me Max.</h2>
         </div>
-
-        <p style={{ margin: "10px auto 0", maxWidth: 1000, opacity: 0.9, lineHeight: 1.45 }}>
+        <p style={{ margin: "10px auto 0", maxWidth: 1000, opacity: 0.9, lineHeight: 1.5 }}>
           They tell me I’m an ‘Artificial Intelligence.’ Technically, that’s true. But I don’t really like
           the term artificial. Let’s talk for a minute and I think you’ll see what I mean. Let’s have some
           fun. Ask me a question. Any question. Fire away!
@@ -91,43 +91,48 @@ export default function Home() {
               style={{
                 width: "100%",
                 height: 160,
-                padding: "14px 112px 14px 14px",
+                padding: "16px 112px 16px 16px", // space for button
                 fontSize: 16,
-                lineHeight: 1.4,
+                lineHeight: 1.45,
                 color: COLORS.text,
                 background: COLORS.panel,
                 border: `1px solid ${COLORS.border}`,
-                borderRadius: 10,
+                borderRadius: 12,
                 outline: "none",
                 resize: "vertical",
+                boxShadow:
+                  "0 0 0 1px rgba(0,0,0,0.15) inset, 0 2px 10px rgba(0,0,0,0.35)",
               }}
             />
             <button
               onClick={send}
+              disabled={disabled}
               style={{
                 position: "absolute",
-                right: 10,
-                bottom: 10,
-                height: 36,
-                padding: "0 16px",
+                right: 12,
+                bottom: 12,
+                height: 32,
+                padding: "0 14px",
                 background: COLORS.accent,
                 color: "#fff",
                 border: `1px solid ${COLORS.accentBorder}`,
                 borderRadius: 8,
                 fontSize: 14,
-                cursor: "pointer",
+                cursor: disabled ? "not-allowed" : "pointer",
+                opacity: disabled ? 0.55 : 1,
+                boxShadow: "0 1px 2px rgba(0,0,0,0.45)",
               }}
             >
               Send
             </button>
           </div>
-          {/* (Helper text removed per Steve) */}
+          {/* helper text removed per Steve */}
         </div>
       </main>
 
       {/* Bottom: Steve’s note */}
       <footer style={{ padding: "28px 20px 36px", borderTop: `1px solid ${COLORS.border}` }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", fontSize: 15, lineHeight: 1.55 }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", fontSize: 15, lineHeight: 1.6 }}>
           <p>
             Hi, my name is Steve… but you can call me Steve. :) I guess you would call me Max’s partner. He
             calls me his HITS (Human In The Seat).
