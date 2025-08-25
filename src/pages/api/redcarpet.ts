@@ -18,10 +18,15 @@ export default async function handler(
     const text = (typeof message === "string" ? message : "").trim();
     if (!text) return res.status(400).json({ ok: false, error: "Empty message" });
 
-    // Stub reply for now — we'll swap in the real Max backend next.
-    const reply = `Max (stub): You said, “${text}”.`;
+    // Minimal Max-like reply (no external API yet)
+    const reply =
+      `Alright. I hear you. Here’s the clean take:\n\n` +
+      `• You said: “${text}”.\n` +
+      `• My move: keep it simple, give you the next best step.\n\n` +
+      `If you want me to go deeper, say “next step” or ask a sharper question.`;
+
     return res.status(200).json({ ok: true, reply });
-  } catch {
+  } catch (e) {
     return res.status(500).json({ ok: false, error: "Server error" });
   }
 }
