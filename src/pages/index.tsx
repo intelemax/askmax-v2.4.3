@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+// src/pages/index.tsx
+import React, { useEffect, useMemo, useState } from "react";
+import { v4 as uuid } from "uuid";
+
+type ChatMsg = { role: "user" | "assistant"; content: string };
 
 export default function Home() {
+  // Light ChatGPT-like palette
   const COLORS = {
     bg: "#f5f5f7",
     panel: "#e6e8eb",
@@ -8,31 +13,60 @@ export default function Home() {
     border: "#d1d5db",
     accent: "#00c2d1",
     accentBorder: "#009aa6",
+    userBg: "#ffffff",
+    assistantBg: "#fdfdfd",
   };
 
   const [input, setInput] = useState("");
   const [logoVisible, setLogoVisible] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [reply, setReply] = useState<string | null>(null);
-  const disabled = loading || input.trim().length === 0;
+  const [messages, setMessages] = useState<ChatMsg[]>([]);
+
+  // Stable per-visitor thread id (used by the API/Redis memory)
+  const threadId = useMemo(() => {
+    if (typeof window === "undefined") return "server";
+    let tid = localStorage.getItem("max_thread_id");
+    if (!tid) {
+      tid = uuid();
+      localStorage.setItem("max_thread_id", tid);
+    }
+    return tid;
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && !localStorage.getItem("max_thread_id")) {
+      localStorage.setItem("max_thread_id", uuid());
+    }
+  }, []);
 
   async function send() {
     const text = input.trim();
     if (!text || loading) return;
-    setLoading(true);
-    setReply(null);
+
+    // optimistic user append
+    setMessages((m) => [...m, { role: "user", content: text }]);
     setInput("");
+    setLoading(true);
+
     try {
       const r = await fetch("/api/redcarpet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text }),
+        body: JSON.stringify({ message: text, threadId }),
       });
       const data = await r.json();
-      if (data?.ok) setReply(String(data.reply));
-      else setReply("Sorry — something went wrong. Try again.");
+
+      if (data?.ok) {
+        setMessages((m) => [...m, { role: "assistant", content: String(data.reply) }]);
+      } else {
+        const errMsg = data?.error ? String(data.error) : "Something went wrong. Try again.";
+        setMessages((m) => [...m, { role: "assistant", content: `Sorry—${errMsg}` }]);
+      }
     } catch {
-      setReply("Network issue — please try again.");
+      setMessages((m) => [
+        ...m,
+        { role: "assistant", content: "Network issue — please try again." },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -79,7 +113,7 @@ export default function Home() {
         </p>
       </header>
 
-      {/* Middle: single input + Send + one reply line */}
+      {/* Middle: chat area + composer */}
       <main
         style={{
           flex: "1 0 auto",
@@ -89,7 +123,39 @@ export default function Home() {
         }}
       >
         <div style={{ width: "100%", maxWidth: 1100, padding: "20px" }}>
-          <div style={{ position: "relative" }}>
+          {/* Chat transcript */}
+          <div
+            style={{
+              background: COLORS.panel,
+              border: `1px solid ${COLORS.border}`,
+              borderRadius: 12,
+              padding: 16,
+              minHeight: 140,
+            }}
+          >
+            {messages.length === 0 ? (
+              <div style={{ opacity: 0.6, fontSize: 14 }}>Ask me anything…</div>
+            ) : (
+              messages.map((m, i) => (
+                <div
+                  key={i}
+                  style={{
+                    background: m.role === "user" ? COLORS.userBg : COLORS.assistantBg,
+                    border: `1px solid ${COLORS.border}`,
+                    borderRadius: 10,
+                    padding: "12px 14px",
+                    marginBottom: 10,
+                    whiteSpace: "pre-wrap",
+                  }}
+                >
+                  <strong>{m.role === "user" ? "You" : "Max"}:</strong> {m.content}
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Composer */}
+          <div style={{ position: "relative", marginTop: 12 }}>
             <textarea
               aria-label="Ask Max"
               placeholder="Ask me anything…"
@@ -98,7 +164,7 @@ export default function Home() {
               onKeyDown={handleKeyDown}
               style={{
                 width: "100%",
-                height: 160,
+                height: 120,
                 padding: "16px 112px 16px 16px",
                 fontSize: 16,
                 lineHeight: 1.45,
@@ -112,7 +178,7 @@ export default function Home() {
             />
             <button
               onClick={send}
-              disabled={disabled}
+              disabled={loading || input.trim().length === 0}
               style={{
                 position: "absolute",
                 right: 12,
@@ -124,29 +190,13 @@ export default function Home() {
                 border: `1px solid ${COLORS.accentBorder}`,
                 borderRadius: 8,
                 fontSize: 14,
-                cursor: disabled ? "not-allowed" : "pointer",
-                opacity: disabled ? 0.55 : 1,
+                cursor: loading || input.trim().length === 0 ? "not-allowed" : "pointer",
+                opacity: loading || input.trim().length === 0 ? 0.55 : 1,
               }}
             >
               {loading ? "…" : "Send"}
             </button>
           </div>
-
-          {/* Single concise reply (no chat log; keeps page minimal) */}
-          {reply && (
-            <div
-              style={{
-                marginTop: 14,
-                padding: "14px 16px",
-                background: "#ffffff",
-                border: `1px solid ${COLORS.border}`,
-                borderRadius: 10,
-                whiteSpace: "pre-wrap",
-              }}
-            >
-              <strong>Max:</strong> {reply}
-            </div>
-          )}
         </div>
       </main>
 
