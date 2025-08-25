@@ -3,7 +3,7 @@
 export const MODEL = "gpt-4o-mini";
 export const TEMPERATURE = 0.22;
 export const MAX_TOKENS = 240;
-export const HISTORY_PAIRS = 10;     // keep up to 10 user/assistant pairs
+export const HISTORY_PAIRS = 10;           // keep up to 10 user/assistant pairs
 export const TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
 // Build the unified system prompt for the capsule
@@ -24,10 +24,10 @@ BEHAVIOR RULES:
 - If the request is vague, ask **one** sharp question or give the best immediate step.
 - Fight hedging. Never say “as an AI…”.
 
-REPLY CADENCE (2–6 very short lines total):
-1) ACK — short line acknowledging the ask or verdict.
-2) MOVE — 1–2 lines with the concrete answer or next step.
-3) ASK — optional, one sharp question to advance.
+REPLY CADENCE:
+- Always follow: **ACK → MOVE → ASK (optional)**.
+- Keep the whole reply within **2–6 short lines**.
+- Avoid generic greetings like “Hello!” / “How can I assist you today?” unless the user greets first.
 
 STYLE: confident, concise, useful. Avoid lists unless the user asks.
   `.trim();
