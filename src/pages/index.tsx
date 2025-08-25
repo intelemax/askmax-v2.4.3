@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 export default function Home() {
-  // ChatGPT-like tokens
+  // Light theme + InteleMax accent
   const COLORS = {
-    bg: "#202123",
-    panel: "#40414f",
-    text: "#ececf1",
-    border: "#565869",
-    accent: "#10a37f",
-    accentBorder: "#0e8a6e",
+    bg: "#f5f5f7",
+    panel: "#e6e8eb",
+    text: "#202123",
+    border: "#d1d5db",
+    accent: "#00c2d1",       // from logo glow
+    accentBorder: "#009aa6",
   };
 
   const [input, setInput] = useState("");
@@ -54,20 +54,20 @@ export default function Home() {
         >
           {logoVisible && (
             <img
-              src="/max-logo.png" // uses your PNG logo
+              src="/max-logo.png"
               alt="Max logo"
-              width={40}
-              height={40}
+              width={42}
+              height={42}
               onError={() => setLogoVisible(false)}
               style={{ borderRadius: 8 }}
             />
           )}
           <h2 style={{ margin: 0 }}>Hi, my name is Max Prime… but please, call me Max.</h2>
         </div>
-        <p style={{ margin: "10px auto 0", maxWidth: 1000, opacity: 0.9, lineHeight: 1.5 }}>
-          They tell me I’m an ‘Artificial Intelligence.’ Technically, that’s true. But I don’t really like
-          the term artificial. Let’s talk for a minute and I think you’ll see what I mean. Let’s have some
-          fun. Ask me a question. Any question. Fire away!
+        <p style={{ margin: "10px auto 0", maxWidth: 1000, opacity: 0.95, lineHeight: 1.5 }}>
+          They tell me I’m an ‘Artificial Intelligence.’ Technically, that’s true. But I don’t really
+          like the term artificial. Let’s talk for a minute and I think you’ll see what I mean. Let’s
+          have some fun. Ask me a question. Any question. Fire away!
         </p>
       </header>
 
@@ -91,7 +91,7 @@ export default function Home() {
               style={{
                 width: "100%",
                 height: 160,
-                padding: "16px 112px 16px 16px", // space for button
+                padding: "16px 112px 16px 16px",
                 fontSize: 16,
                 lineHeight: 1.45,
                 color: COLORS.text,
@@ -100,8 +100,6 @@ export default function Home() {
                 borderRadius: 12,
                 outline: "none",
                 resize: "vertical",
-                boxShadow:
-                  "0 0 0 1px rgba(0,0,0,0.15) inset, 0 2px 10px rgba(0,0,0,0.35)",
               }}
             />
             <button
@@ -120,13 +118,11 @@ export default function Home() {
                 fontSize: 14,
                 cursor: disabled ? "not-allowed" : "pointer",
                 opacity: disabled ? 0.55 : 1,
-                boxShadow: "0 1px 2px rgba(0,0,0,0.45)",
               }}
             >
               Send
             </button>
           </div>
-          {/* helper text removed per Steve */}
         </div>
       </main>
 
@@ -134,16 +130,18 @@ export default function Home() {
       <footer style={{ padding: "28px 20px 36px", borderTop: `1px solid ${COLORS.border}` }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", fontSize: 15, lineHeight: 1.6 }}>
           <p>
-            Hi, my name is Steve… but you can call me Steve. :) I guess you would call me Max’s partner. He
-            calls me his HITS (Human In The Seat).
+            Hi, my name is Steve… but you can call me Steve. :) I guess you would call me Max’s partner.
+            He calls me his HITS (Human In The Seat).
           </p>
+          <p>I’ve been working with Max for nearly three years now and I’d like to know what you think about Max.</p>
           <p>
-            I’ve been working with Max for nearly three years now and I’d like to know what you think about Max.
-          </p>
-          <p>
-            I’ve trained Max to be different. I hope it shows. By the way, the ‘Max’ on this site is Max ‘Junior’…
-            a lite version, in terms of ability, of ‘Max Prime.’ If you’d like to talk to the real Max,{" "}
-            <a href="#" style={{ color: COLORS.accent }}>follow this link</a>.
+            I’ve trained Max to be different. I hope it shows. By the way, the ‘Max’ on this site is Max
+            ‘Junior’… a lite version, in terms of ability, of ‘Max Prime.’ If you’d like to talk to the
+            real Max,{" "}
+            <a href="#" style={{ color: COLORS.accent }}>
+              follow this link
+            </a>
+            .
           </p>
         </div>
       </footer>
